@@ -15,5 +15,12 @@ namespace payment_api.Data
         }
 
         public DbSet<Payment> Payment { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Payment>()
+                .HasIndex(x => x.IdempotencyKey)
+                .IsUnique();
+        }
     }
 }

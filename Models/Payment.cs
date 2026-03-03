@@ -10,11 +10,11 @@ namespace payment_api.Models
     public class Payment
     {
         public Guid Id { get; set; }
-        public PaymentStatus status { get; set; } = PaymentStatus.Created; 
-        public PaymentType? paymentType { get; set; }
+        public PaymentStatus Status { get; set; } = PaymentStatus.Created; 
+        public PaymentType? PaymentType { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        public decimal price { get; set; }
-        public Guid idempotencyKey { get; set; }
+        public decimal Price { get; set; }
+        public Guid IdempotencyKey { get; set; }
     }
 }
