@@ -15,7 +15,7 @@ namespace payment_api.Repository
     {
         private readonly ApplicationDBContext _context;
         private const int DB_DUPLICATE_STATUS_CODE = 2601;
-        private const int DB_UNIQUE_CONSTRAINT_CODE = 2601;
+        private const int DB_UNIQUE_CONSTRAINT_CODE = 2627;
         public PaymentRepository(ApplicationDBContext context)
         {
             _context = context;
