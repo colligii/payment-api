@@ -60,7 +60,7 @@ namespace payment_api.Controllers
         }
         
 
-        [HttpPatch("/pay/{id:guid}")]
+        [HttpPatch("pay/{id:guid}")]
         public async Task<IActionResult> Pay([FromRoute] Guid id, [FromBody] PayPaymentRequestDto payPaymentDto)
         {
             // You must add validation of payment on this layer
