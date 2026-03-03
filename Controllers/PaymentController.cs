@@ -20,6 +20,14 @@ namespace payment_api.Controllers
             _paymentRepo = paymentRepo;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            var paymentList = await _paymentRepo.GetAllAsync();
+
+            return Ok(paymentList.Select(p => p.ToPaymentResponse()));
+        }
+
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {

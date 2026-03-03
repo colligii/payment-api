@@ -9,8 +9,8 @@ namespace payment_api.Dtos.Payment
     public class PaymentResponse
     {
         public Guid Id { get; set; }
-        public PaymentStatus Status { get; set; } = PaymentStatus.Created; 
-        public PaymentType? PaymentType { get; set; }
+        public string? Status { get; set; }
+        public string? PaymentType { get; set; }
         public decimal Price { get; set; }
         public Guid IdempotencyKey { get; set; }
     }

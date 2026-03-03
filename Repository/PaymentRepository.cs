@@ -43,5 +43,10 @@ namespace payment_api.Repository
         {
             return await _context.Payment.FirstOrDefaultAsync(x => x.IdempotencyKey == IdempotencyKey);
         }
+    
+        public async Task<List<Payment>> GetAllAsync()
+        {
+            return await _context.Payment.ToListAsync();
+        }
     }
 }
