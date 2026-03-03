@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using payment_api.Dtos.Payment;
+using payment_api.Interface;
+using payment_api.Mappers;
+using payment_api.Models;
+
+namespace payment_api.Controllers
+{
+    [Route("api/payment")]
+    [ApiController]
+    public class PaymentController : ControllerBase
+    {
+        private readonly IPaymentRepository _paymentRepo;
+        public PaymentController(IPaymentRepository paymentRepo)
+        {
+            _paymentRepo = paymentRepo;
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        {
+            var paymentModel = await _paymentRepo.GetById(id);
+
+            if(paymentModel == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(paymentModel.ToPaymentResponse());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreatePaymentRequestDTO paymentDto)
+        {
+            var paymentModel = paymentDto.ToPaymentModel();
+            var paymentReponse = await _paymentRepo.Create(paymentModel);
+            
+            if(paymentReponse != null)
+                return CreatedAtAction(nameof(GetById), new { id = paymentModel.Id }, paymentModel);
+
+            var paymentByIdempotency = await _paymentRepo.GetByIdempotencyKey(paymentDto.IdempotencyKey);
+
+            if(paymentByIdempotency == null)
+                return NotFound();
+                
+            return Ok(paymentByIdempotency.ToPaymentResponse());
+        }
+        
+    }
+}
