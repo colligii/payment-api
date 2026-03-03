@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using payment_api.Dtos.Payment;
+using payment_api.Enums;
 using payment_api.Interface;
 using payment_api.Mappers;
 using payment_api.Models;
@@ -65,7 +66,19 @@ namespace payment_api.Controllers
             // You must add validation of payment on this layer
             // also is better use an service to put all logic inside it
             // right now i just gonna make it simple
-            return Ok("Ok");
+            var paymentPay = await _paymentRepo.GetPaymentForPay(id);
+
+            if(paymentPay == null)
+                return BadRequest("Payment not found or already paid");
+
+            // proccess the payment this is idempotent
+            // in this case i gonna mock as already paid with api
+
+            paymentPay.Status = PaymentStatus.Paid;
+            paymentPay.PaymentType = (PaymentType)payPaymentDto.paymentType;
+
+            var payment = await _paymentRepo.UpdateAsync(paymentPay);
+            return Ok(payment);
         }
     }
 }

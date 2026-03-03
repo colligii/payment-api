@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using payment_api.Data;
+using payment_api.Enums;
 using payment_api.Interface;
 using payment_api.Models;
 
@@ -47,6 +48,32 @@ namespace payment_api.Repository
         public async Task<List<Payment>> GetAllAsync()
         {
             return await _context.Payment.ToListAsync();
+        }
+
+        public async Task<Payment?> GetPaymentForPay(Guid id)
+        {
+            var rows = await _context.Database.ExecuteSqlRawAsync(
+                @"UPDATE payment.dbo.Payment
+                SET Status = @newStatus
+                WHERE Id = @Id AND Status = @oldStatus",
+                new SqlParameter("@newStatus", PaymentStatus.Processing),
+                new SqlParameter("@Id", id),
+                new SqlParameter("@oldStatus", PaymentStatus.Created)
+            );
+
+            if(rows == 0)
+            {
+                return null;
+            }
+
+            return await _context.Payment.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Payment> UpdateAsync(Payment Data)
+        {
+            _context.Payment.Update(Data);
+            await _context.SaveChangesAsync();
+            return Data;
         }
     }
 }

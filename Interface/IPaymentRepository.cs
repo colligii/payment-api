@@ -12,5 +12,7 @@ namespace payment_api.Interface
         Task<Payment?> Create(Payment Data); 
         Task<Payment?> GetByIdempotencyKey(Guid IdempotencyKey);
         Task<List<Payment>> GetAllAsync();
+        Task<Payment?> GetPaymentForPay(Guid id);
+        Task<Payment> UpdateAsync(Payment Data);
     }
 }
