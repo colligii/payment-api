@@ -58,5 +58,14 @@ namespace payment_api.Controllers
             return Ok(paymentByIdempotency.ToPaymentResponse());
         }
         
+
+        [HttpPatch("/pay/{id:guid}")]
+        public async Task<IActionResult> Pay([FromRoute] Guid id, [FromBody] PayPaymentRequestDto payPaymentDto)
+        {
+            // You must add validation of payment on this layer
+            // also is better use an service to put all logic inside it
+            // right now i just gonna make it simple
+            return Ok("Ok");
+        }
     }
 }
